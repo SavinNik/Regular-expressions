@@ -8,18 +8,20 @@ with open("phonebook_raw.csv", encoding="utf-8") as f:
 
 new_phonebook = [contacts_list[0]]
 
-for name in range(1, len(contacts_list)):
-    res = " ".join(contacts_list[name][:3]).strip().split(" ")
+for i in range(1, len(contacts_list)):
+    res = " ".join(contacts_list[i][:3]).strip().split(" ")
 
     name_list = []
     for item in res:
         if item:
             name_list.append(item)
 
-    new_phonebook.append([
-        name_list[0], name_list[1], name_list[2] if len(name_list) > 2 else " ",
-        contacts_list[name][3], contacts_list[name][4], contacts_list[name][5], contacts_list[name][6]
-    ])
+    for name in name_list:
+        if name not in new_phonebook:
+            new_phonebook.append([
+                name_list[0], name_list[1], name_list[2] if len(name_list) > 2 else " ",
+                contacts_list[i][3], contacts_list[i][4], contacts_list[i][5], contacts_list[i][6]
+            ])
 
 pattern = r"(\+7|8)?\s*\(*(\d{3})\)*[\s-]*(\d{3})[\s-]*(\d{2})[\s-]*(\d{2})\s*\(*([доб\.]*)\s*(\d{4})?\)*"
 pattern_comp = re.compile(pattern)
@@ -35,7 +37,7 @@ def remove_duplicates(data):
     for j in data[1:]:
         key = (j[0], j[1])
         if key in remove_dict:
-            if j[2]:
+            if j[2] != " ":
                 remove_dict[key][2] = j[2]
             if j[3]:
                 remove_dict[key][3] = j[3]
